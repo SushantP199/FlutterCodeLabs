@@ -87,7 +87,7 @@ final List<CategoryModel> categories = [
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: DetailsPage(), //SplashPage(),
+    home: SplashPage(),
   ));
 }
 
@@ -102,8 +102,8 @@ class SplashPage extends StatelessWidget {
     return Container(
       color: mainColor,
       child: Stack(
-        children: const [
-          Align(
+        children:  [
+          const Align(
             alignment: Alignment.center,
             child: Icon(
               Icons.terrain,
@@ -113,8 +113,11 @@ class SplashPage extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 80),
+              child: const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
             ),
           )
         ],
@@ -167,10 +170,14 @@ class MountsApp extends StatelessWidget {
 
 class DetailsPage extends StatelessWidget {
 
+  final MountModel mount;
+
+  const DetailsPage(this.mount);
+
   @override 
   Widget build (BuildContext context){
 
-    var selectedItem = mountItems[0];
+    var selectedItem = mount;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -416,36 +423,43 @@ class AppMountListView extends StatelessWidget{
 
           MountModel currentMount = mountItems[index];
 
-          return Container(
-            alignment: Alignment.bottomLeft,
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.all(20),
-            width: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              image: DecorationImage(
-                image: NetworkImage(currentMount.path),
-                fit: BoxFit.cover,
-              )
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  currentMount.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  currentMount.location,
-                  style: const TextStyle(
-                    color: Colors.white
-                  ),
+          return GestureDetector(
+            onTap: (){
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => DetailsPage(currentMount))
+              );
+            },
+            child: Container(
+              alignment: Alignment.bottomLeft,
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(20),
+              width: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  image: NetworkImage(currentMount.path),
+                  fit: BoxFit.cover,
                 )
-              ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    currentMount.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    currentMount.location,
+                    style: const TextStyle(
+                      color: Colors.white
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         },
