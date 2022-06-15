@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 /* Globals */
@@ -36,7 +38,7 @@ final List<AttractionModel> attractions = [
 void main() {
   runApp(
     MaterialApp(
-      home: LandingPage(),
+      home: SplashPage(),
       debugShowCheckedModeBanner: false,
     )
   );
@@ -101,7 +103,142 @@ class LandingPage extends StatelessWidget {
       )
     );
   }
+}
 
+class DetailsPage extends StatelessWidget {
+
+  final AttractionModel? selectedModel;
+
+  const DetailsPage({this.selectedModel});
+
+  @override 
+  Widget build (BuildContext context){
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(selectedModel!.imgPath!),
+                fit: BoxFit.cover
+              )
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.8)
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter
+              )
+            ),
+          ),
+          AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            iconTheme: const IconThemeData(color: mainYellow),
+            centerTitle: true,
+            title: const Icon(Icons.airplanemode_on),
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: IconButton(
+                  onPressed: (){}, 
+                  icon: const Icon(
+                    Icons.favorite
+                  )
+                ),
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(selectedModel!.name!, style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold)),
+                Text(selectedModel!.location!, style: const TextStyle(color: mainYellow),),
+                const SizedBox(height: 20),
+                Text(selectedModel!.description!, style: TextStyle(color: Colors.white.withOpacity(0.7))), 
+                const SizedBox(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: (){}, 
+                      child: const Text(
+                        'View Comments',
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      )
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Material(
+                        color: mainYellow,
+                        child: InkWell(
+                          onTap: (){},
+                          splashColor: Colors.black.withOpacity(0.1),
+                          highlightColor: Colors.black.withOpacity(0.2),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            child: const Text('Use Itinerary', style: TextStyle(color: Colors.black, fontWeight:  FontWeight.bold)),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          
+        ],
+      )
+    );
+  }
+}
+
+class SplashPage extends StatelessWidget {
+
+  @override 
+  Widget build (BuildContext context){
+
+    Future.delayed(const Duration(seconds: 2), (){
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => LandingPage())
+      );
+    });
+
+    return Stack(
+      children: [
+        Container(
+          color: mainYellow,
+        ),
+        const Align(
+          alignment: Alignment.center,
+          child: Icon(Icons.airplanemode_on, color: Colors.black, size: 80),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: SizedBox(
+            width: 160,
+            height: 160,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black.withOpacity(0.2)),
+              strokeWidth: 10,
+            ),
+          ),
+        )
+      ],
+    );
+  }
 }
 
 /* Widgets */
@@ -199,46 +336,57 @@ class AttractionCard extends StatelessWidget {
   @override 
   Widget build (BuildContext context){
 
-    return Container(
-      width: 180,
-      margin: const EdgeInsets.all(10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(attractionModel!.imgPath!),
-                  fit: BoxFit.cover
-                )
+    return GestureDetector(
+      onTap: (){
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context){
+              return DetailsPage(selectedModel: attractionModel,);
+            }
+          )
+        );
+      },
+      child: Container(
+        width: 180,
+        margin: const EdgeInsets.all(10),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(25),
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(attractionModel!.imgPath!),
+                    fit: BoxFit.cover
+                  )
+                ),
               ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.5)
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.5)
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter
+                  )
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(attractionModel!.name!, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 10),
+                    Text(attractionModel!.location!, style: const TextStyle(color: mainYellow)),
                   ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter
-                )
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(attractionModel!.name!, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 10),
-                  Text(attractionModel!.location!, style: const TextStyle(color: mainYellow)),
-                ],
-              ),
-            )
-          ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
