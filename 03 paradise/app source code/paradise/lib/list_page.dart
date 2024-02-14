@@ -62,30 +62,36 @@ class ListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(50),
-            topRight: Radius.circular(50),
-          ),
+      body: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: attractionsList.length,
-                itemBuilder: (context, index) {
-                  Attraction attr = attractionsList[index];
-                  return AttractionCard(
-                    attraction: attr,
-                  );
-                },
-              ),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
             ),
-            const BottomBarWidget(),
-          ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: attractionsList.length,
+                  itemBuilder: (context, index) {
+                    Attraction attr = attractionsList[index];
+                    return AttractionCard(
+                      attraction: attr,
+                    );
+                  },
+                ),
+              ),
+              const BottomBarWidget(),
+            ],
+          ),
         ),
       ),
     );
